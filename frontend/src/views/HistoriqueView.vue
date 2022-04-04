@@ -32,7 +32,6 @@
                         <li>
                             <!-- <a href="#">Log Out</a> -->
                             <router-link to="/">Log Out</router-link>
-                            
                         </li>
                     </div>
                 </div>
@@ -93,7 +92,7 @@
                                 <div class="time">10:00 - 10:30</div>
                             </div>
                         </div>
-                        <form >
+                        <form>
                             <a href=" #popup1">
                                 <img src="../assets/add.png" />
                             </a>
@@ -143,7 +142,7 @@
                             </div>
                         </div>
 
-                        <form >
+                        <form>
                             <a href=" #popup1">
                                 <img src="../assets/add.png" />
                             </a>
@@ -186,44 +185,17 @@
                 </div>
                 <hr />
                 <div class="historique">
-                    <div class="rendez-content">
+                    <div v-for="data in list" :key="data.id" class="rendez-content">
                         <div class="rendez">
                             <div class="sous-rendez">
-                                <div class="object">build a house</div>
-                                <div class="date">03/12/2022</div>
-                                <div class="time">10:00 - 10:30</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="rendez-content">
-                        <div class="rendez">
-                            <div class="sous-rendez">
-                                <div class="object">build a house</div>
-                                <div class="date">03/12/2022</div>
-                                <div class="time">10:00 - 10:30</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="rendez-content">
-                        <div class="rendez">
-                            <div class="sous-rendez">
-                                <div class="object">build a house</div>
-                                <div class="date">03/12/2022</div>
-                                <div class="time">10:00 - 10:30</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="rendez-content">
-                        <div class="rendez">
-                            <div class="sous-rendez">
-                                <div class="object">build a house</div>
-                                <div class="date">03/12/2022</div>
-                                <div class="time">10:00 - 10:30</div>
+                                <div class="object">{{ data.sujet }}</div>
+                                <div class="date">{{ data.date_r }}</div>
+                                <div class="time">{{ data.date_c }}</div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="rendez-content">
+                    <!-- <div class="rendez-content">
                         <div class="rendez">
                             <div class="sous-rendez">
                                 <div class="object">build a house</div>
@@ -232,6 +204,7 @@
                             </div>
                         </div>
                     </div>
+                    -->
                 </div>
             </div>
         </div>
@@ -266,6 +239,32 @@
     </main>
 </template>
 
+<script>
+
+export default {
+    name: "historique-view",
+    mounted() {
+        fetch("http://localhost/rdv/backend/admin/rdvAll").then(res => res.json()).then(list => {
+            this.list = list;
+        })
+    },
+    data() {
+        return {
+            // list: Array(4).fill({ id_r: "", date_r: new Date("2022-03-28"), sujet: "tester", id_creneau: 1, id_client: 1, date_c: "de 10 h a 10:30 h" }).map(v => ({ ...v, id: Math.random() })),
+            list: {
+                id_r: "",
+                date_r: "",
+                sujet: "",
+                id_creneau: "",
+                id_client: "",
+                date_c: "",
+            },
+            client: {}
+        }
+    }
+}
+</script>
+
 
 <style scoped >
 * {
@@ -295,7 +294,7 @@ template {
     background-image: url(../assets/back2.png);
     /* background:linear-gradient(to top,rgba(0,0,0,0.5)25%,rgba(0,0,0,0.5)25%),url(../assets/back.png); */
     /* width: 100vw; */
-    height: 125vh;
+    min-height: 125vh;
     background-repeat: no-repeat !important;
     background-size: cover;
     margin: 0;
@@ -515,7 +514,7 @@ hr {
     border-radius: 15px;
     padding: 7%;
     width: 80%;
-    margin-left: 15%;
+    margin-left: 11%;
     margin-top: 5%;
     padding-bottom: 3%;
 }

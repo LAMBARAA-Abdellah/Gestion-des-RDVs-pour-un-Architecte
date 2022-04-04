@@ -156,7 +156,7 @@
     background-image: url(../assets/back2.png);
      /* background:linear-gradient(to top,rgba(0,0,0,0.5)25%,rgba(0,0,0,0.5)25%),url(../assets/back.png); */
     /* width: 100vw; */
-    height: 125vh;
+    min-height: 125vh;
     background-repeat:no-repeat !important;
     background-size: cover;
     margin: 0;

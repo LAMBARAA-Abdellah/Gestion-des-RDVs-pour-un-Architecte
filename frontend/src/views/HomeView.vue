@@ -126,6 +126,39 @@
     </footer>
   </main>
 </template>
+
+<script>
+
+export default {
+    name: "historique-view",
+    mounted() {
+        fetch("http://localhost/rdv/backend/admin/rdvAll").then(res => res.json()).then(list => {
+            this.list = list;
+        })
+    },
+    data() {
+        return {
+            // list: Array(4).fill({ id_r: "", date_r: new Date("2022-03-28"), sujet: "tester", id_creneau: 1, id_client: 1, date_c: "de 10 h a 10:30 h" }).map(v => ({ ...v, id: Math.random() })),
+            list: {
+                id_r: "",
+                date_r: "",
+                sujet: "",
+                id_creneau: "",
+                id_client: "",
+                date_c: "",
+            },
+            client: {}
+        }
+    },
+    methods: {
+      check(){
+        
+      }
+
+    }
+}
+</script>
+
 <style scoped>
 * {
   font-family: "Roboto";
@@ -350,6 +383,7 @@ footer div h3 {
 @media (max-width: 600px) {
   .allHome {
     background-image: url(../assets/iPhone_11_Pro_Max_-_1.png);
+    height: auto;
   }
   .logo img {
     width: 80px;
