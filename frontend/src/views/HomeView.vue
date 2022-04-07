@@ -1,6 +1,7 @@
 <script setup>
+import { ref } from '@vue/reactivity';
 // import TheWelcome from '@/components/TheWelcome.vue'
-
+const showPopup = ref(false);
 </script>
 
 <template>
@@ -14,9 +15,9 @@
     </div>
     <div class="content">
       <div class="recherche">
-        <form class="example" action="./HistoriqueView.vue" style="margin:auto;max-width:300px">
-          <input type="text" placeholder="Identification code.." name="search2" />
-          <button type="submit">
+        <form @submit.prevent class="example" style="margin:auto;max-width:300px">
+          <input type="text" v-model="Login" placeholder="Identification code.." name="search2" />
+          <button @click="check()" type="submit">
             <img src="../assets/Vector.png" alt />
           </button>
         </form>
@@ -24,37 +25,35 @@
         <h4> Dont Have One ?</h4>
        
         </a>-->
-        <form action="#">
-          <a class href="#popup1">
-            <h4>Dont Have One ?</h4>
-          </a>
-          <div id="popup1" class="overlay">
+        <form >
+          <h4 @click="showPopup = true">Dont Have One ?</h4>
+          <div v-if="showPopup" id="popup1" class="overlay">
             <div class="popup">
               <h2>Create Your Account</h2>
-              <a class="close" href="#">&times;</a>
+              <p class="close" @click="showPopup = false">&times;</p>
               <div class="contentt">
                 <div>
                   <div class="A1">
                     <label for>First Name</label>
-                    <input type="text" placeholder="First Name" />
+                    <input type="text" v-model="userform.fname" placeholder="First Name" />
                   </div>
                   <div class="A2">
                     <label for>Last Name</label>
-                    <input type="text" placeholder="Last Name" />
+                    <input type="text" v-model="userform.lname" placeholder="Last Name" />
                   </div>
                 </div>
                 <div>
                   <div class="A1">
                     <label for>Telephone</label>
-                    <input type="text" placeholder="Telephone" />
+                    <input type="text" v-model="userform.tel" placeholder="Telephone" />
                   </div>
                   <div class="A2">
                     <label for>Subject</label>
-                    <input type="text" placeholder="Subject" />
+                    <input type="text" v-model="userform.sujet" placeholder="Subject" />
                   </div>
                 </div>
               </div>
-              <button type="submit" class="btn btn-primary create">create</button>
+              <button type="submit" @click="addUser()" class="create">create</button>
             </div>
           </div>
         </form>
@@ -130,32 +129,90 @@
 <script>
 
 export default {
-    name: "historique-view",
-    mounted() {
-        fetch("http://localhost/rdv/backend/admin/rdvAll").then(res => res.json()).then(list => {
-            this.list = list;
-        })
-    },
-    data() {
-        return {
-            // list: Array(4).fill({ id_r: "", date_r: new Date("2022-03-28"), sujet: "tester", id_creneau: 1, id_client: 1, date_c: "de 10 h a 10:30 h" }).map(v => ({ ...v, id: Math.random() })),
-            list: {
-                id_r: "",
-                date_r: "",
-                sujet: "",
-                id_creneau: "",
-                id_client: "",
-                date_c: "",
-            },
-            client: {}
-        }
-    },
-    methods: {
-      check(){
-        
-      }
-
+  name: "home-view",
+  // mounted() {
+  //   fetch("http://localhost/rdv/backend/admin/rdvAll").then(res => res.json()).then(list => {
+  //     this.list = list;
+  //   })
+  // },
+  data() {
+    return {
+      // list: Array(4).fill({ id_r: "", date_r: new Date("2022-03-28"), sujet: "tester", id_creneau: 1, id_client: 1, date_c: "de 10 h a 10:30 h" }).map(v => ({ ...v, id: Math.random() })),
+      list: {
+        id_r: "",
+        date_r: "",
+        sujet: "",
+        id_creneau: "",
+        id_client: "",
+        date_c: "",
+      },
+      client: {},
+      Login: "",
+      userform: {
+        fname: "",
+        lname: "",
+        tel: "",
+        sujet: "",
+      },
     }
+  },
+  methods: {
+    showAlert($id) {
+      // Use sweetalert2
+      alert(`Here is your reference id:`+ $id);
+
+    },
+    check() {
+      fetch("http://localhost/rdv/backend/admin/index", {
+        method: "POST",
+        body: this.Login,
+
+      }).then(Response => Response.json())
+        .then((result) => {
+          if (result) {
+            this.$router.push("/admin");
+          }
+          else {
+            fetch("http://localhost/rdv/backend/User/index", {
+              method: "POST",
+              body: this.Login,
+            }).then(Response => Response.json())
+              .then((result) => {
+                if (result) {
+                  localStorage.setItem("id", result.id);
+                  this.$router.push("/dashboard");
+
+
+                }
+              })
+          }
+
+
+        })
+
+    },
+    addUser() {
+      fetch("http://localhost/rdv/backend/User/register", {
+        method: "POST",
+        body: JSON.stringify(this.userform),
+
+      })
+        .then((result) => {
+          return result.json();
+
+        })
+        .then((data) => {
+          if (data) {
+            this.showAlert(data[4]);
+            this.$router.push("/");
+            // this.form = !this.form
+
+          }
+          // this.add(data);
+        });
+    },
+
+  }
 }
 </script>
 
@@ -183,7 +240,7 @@ template {
   background-image: url(../assets/back.png);
   /* background:linear-gradient(to top,rgba(0,0,0,0.5)25%,rgba(0,0,0,0.5)25%),url(../assets/back.png); */
   /* width: 100vw; */
-  height: 125vh;
+  min-height: 125vh;
   background-repeat: no-repeat !important;
   background-size: cover;
   margin: 0;
@@ -262,6 +319,10 @@ button img {
   font-weight: 100;
   margin-left: 20px;
   margin-top: 7px;
+  cursor: pointer;
+}
+.recherche h4:hover {
+  text-decoration: underline;
 }
 a {
   text-decoration-color: #f9a800;
@@ -499,14 +560,7 @@ footer div h3 {
   left: 0;
   right: 0;
   background: rgba(0, 0, 0, 0.7);
-  transition: opacity 500ms;
-  visibility: hidden;
-  opacity: 0;
-}
-.overlay:target {
-  visibility: visible;
-  opacity: 1;
-  z-index: 999;
+  z-index: 10;
 }
 
 .popup {
@@ -536,6 +590,7 @@ footer div h3 {
   font-weight: bold;
   text-decoration: none;
   color: white;
+  cursor: pointer;
 }
 .popup .close:hover {
   color: #f9a800;
@@ -580,6 +635,7 @@ footer div h3 {
   border: none;
   font-size: 20px;
   cursor: pointer;
+  transition: all 200ms;
 }
 
 @media screen and (max-width: 700px) {

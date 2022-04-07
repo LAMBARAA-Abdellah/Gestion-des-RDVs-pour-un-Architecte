@@ -3,7 +3,7 @@ header('Content-Type: application/json');
 header('Access-Control-Allow-Origin:*');
 header('Access-Control-Allow-Methods:*');
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
+    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'])) header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
     if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS'])) header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
 }
 if ($_SERVER["REQUEST_METHOD"] == "OPTIONS") return true;
@@ -11,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "OPTIONS") return true;
 class Admin extends Controller
 {
     public $id;
-    public $valide = false;
+    public $valide;
     public function __construct()
     {
     }
@@ -19,21 +19,25 @@ class Admin extends Controller
     public function index()
     {
         $admin = $this->model('AdminModel');
-        // users si la liste des user in database
+
         $admins = $admin->selectAll();
-        // var_dump($admins);
+
+        // users si la liste des user in database
+
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $json = file_get_contents('php://input');
-            $data = json_decode($json);
+            // $data = json_decode($json);
+            // $key = $data;
             foreach ($admins as $admin) {
-                if ($admin['Reference_unique'] == $data) {
-                    $this->valide = true;
+                if ($admin['psseudo_admin'] == $json) {
+                    $this->valide = $admin;
                     break;
                 } else {
                     $this->valide = false;
                 }
             }
             echo json_encode($this->valide);
+            // echo json_encode($json);
         }
     }
 
@@ -46,6 +50,17 @@ class Admin extends Controller
             // echo json_encode($id);
         }
     }
+    
+    public function deleteClient()
+    {
+        if ($_SERVER["REQUEST_METHOD"] === "DELETE") {
+            $this->id = $_GET['id'];
+            $admin = $this->model('AdminModel');
+            $admin->remove($this->id);
+            
+            // echo json_encode($id);
+        }
+    }
     public function DELETERDV()
     {
         if ($_SERVER["REQUEST_METHOD"] === "GET") {
@@ -54,17 +69,26 @@ class Admin extends Controller
         }
     }
 
-    public function UserAll()
+    public function getAllClient()
     {
         $admin = $this->model('UserModel');
         $admins = $admin->selectAll();
         echo json_encode($admins);
     }
 
-    public function RDVALL()
+    public function RDVALL($id)
     {
         $admin = $this->model('RDVModel');
-        $admins = $admin->selectAll(1);
+        $admins = $admin->selectAll($id);
         echo json_encode($admins);
+    }
+    public function getAllRdv()
+    {
+        $admin = $this->model('RDVModel');
+        $rdvs = $admin->selectAllRdv();
+        // header("Content-Type: application/json");
+        // var_dump($rdvs);
+        echo json_encode($rdvs);
+        die();
     }
 }

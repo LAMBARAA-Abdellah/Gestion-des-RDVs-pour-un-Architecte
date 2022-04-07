@@ -18,12 +18,12 @@ class UserModel
         $result = $stm->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
-    public function select($data, $id)
+    public function select($id)
     {
         $conn = $this->db;
-        $requi = "SELECT " . $data . "FROM `client` WHERE id=" . $id;
+        $requi = "SELECT * FROM `client` WHERE id=" . $id;
         $stm = $conn->prepare($requi);
-        return  $stm->execute();
+        $stm->execute();
         $result = $stm->fetch(PDO::FETCH_ASSOC);
         return $result;
     }
@@ -35,21 +35,22 @@ class UserModel
         $stm->execute();
     }
     // methodes pour insert une data dans database
-    // public function insert($data)
-    // {
-    //     $conn = $this->db;
-    //     $requi = "INSERT INTO `utilisateur` (" . getval($data) . ") VALUES (" . getPlaceholders($data) . ")";
-    //     $stm = $conn->prepare($requi);
-
-       
-    
-    //     $stm->execute($data);
-    // }
-    public function insert($data){
+    public function getcreDate($data)
+    {
         $conn = $this->db;
-        $requet = "INSERT INTO `client`(`fname`, `lname`, `tel`,`profession`, `psseudo_client') VALUES (?,?,?,?,?)";
+        $requi = "SELECT `id_creneau` FROM `rdv` WHERE date_r:".$data;
+        $stm = $conn->prepare($requi);
+        $stm->execute();
+        $result = $stm->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
+    public function insert($data)
+    {
+        $conn = $this->db;
+        $requet = "INSERT INTO `client` (`fname`, `lname`, `tel`,`profession`, `psseudo_client`) VALUES (?,?,?,?,?)";
         $stmn = $conn->prepare($requet);
-        return $stmn->execute([$data[0],$data[1],$data[2],$data[3],$data[4]]);
+        // var_dump($data);
+        return $stmn->execute($data);
     }
     public function Updat($data, $id)
     {
@@ -58,5 +59,4 @@ class UserModel
         $stm = $conn->prepare($requi);
         $stm->execute();
     }
-
 }

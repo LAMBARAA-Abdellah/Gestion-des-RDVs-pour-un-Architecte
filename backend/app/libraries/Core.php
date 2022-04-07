@@ -1,7 +1,7 @@
 <?php
   class Core {
 
-    protected $currentController = 'Pages'; // Default controller
+    protected $currentController = 'User'; // Default controller
     protected $currentMethod = 'index'; // Default method
     protected $params = []; // Set initial empty params array
     public function __construct(){

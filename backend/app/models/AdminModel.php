@@ -1,6 +1,5 @@
 <?php
 require_once APPROOT . '/config/config.php';
-require_once APPROOT . "../config/Function.php";
 class AdminModel
 {
     protected $db;
@@ -9,7 +8,7 @@ class AdminModel
         $con = new Database();
         $this->db = $con->dbh;
     }
-    
+
     public function selectAll()
     {
         $conn = $this->db;
@@ -20,9 +19,10 @@ class AdminModel
         return $result;
     }
 
-    public function remove($id){
+    public function remove($id)
+    {
         $conn = $this->db;
-        $requet = "DELETE FROM `client` WHERE id=".$id;
+        $requet = "DELETE FROM `client` WHERE id=" . $id;
         $stmn = $conn->prepare($requet);
         return $stmn->execute();
     }

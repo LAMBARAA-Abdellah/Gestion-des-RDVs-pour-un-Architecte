@@ -2,6 +2,19 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 
+// import "./assets/style/index.css";
+// import VueSweetalert2 from 'vue-sweetalert2';
+// import 'sweetalert2/dist/sweetalert2.min.css';
+
+// createApp(App).use(VueSweetalert2).
+//   use(router).mount("#app");
+// // const app = createApp(App);
+
+// // app.;
+
+
+
+
 const app = createApp(App)
 
 app.use(router)
@@ -20,17 +33,17 @@ var btn = document.getElementById("myBtn");
 var span = document.getElementsByClassName("close")[0];
 
 // When the user clicks the button, open the modal 
-btn.onclick = function() {
+btn.onclick = function () {
   modal.style.display = "block";
 }
 
 // When the user clicks on <span> (x), close the modal
-span.onclick = function() {
+span.onclick = function () {
   modal.style.display = "none";
 }
 
 // When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
+window.onclick = function (event) {
   if (event.target == modal) {
     modal.style.display = "none";
   }
