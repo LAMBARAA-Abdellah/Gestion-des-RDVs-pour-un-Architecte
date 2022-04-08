@@ -18,10 +18,21 @@ class RDVModel
         $result = $stm->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
-    public function selectAll($id)
+    public function selectAll1($id)
     {
         $conn = $this->db;
-        $requete  = "SELECT * FROM `rdv` where id_client=$id";
+        $requete  = "SELECT * FROM rdv where id_client=$id and date_r>CURRENT_DATE() order by date_r  ASC;";
+        // SELECT * FROM rdv,client where rdv.id_client=client.id and client.id=59 and date_r<CURRENT_DATE();
+        $stm = $conn->prepare($requete);
+        $stm->execute();
+        $result = $stm->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
+    public function selectAll2($id)
+    {
+        $conn = $this->db;
+        $requete  = "SELECT * FROM rdv where id_client=$id and date_r <= CURRENT_DATE() order by date_r  ASC;";
+        // SELECT * FROM rdv,client where rdv.id_client=client.id and client.id=59 and date_r<CURRENT_DATE();
         $stm = $conn->prepare($requete);
         $stm->execute();
         $result = $stm->fetchAll(PDO::FETCH_ASSOC);
@@ -35,6 +46,15 @@ class RDVModel
         $stm->execute();
     }
 
+    public function getcreDate($data)
+    {
+        $conn = $this->db;
+        $requi = "SELECT id_creneau FROM rdv WHERE date_r='$data'";
+        $stm = $conn->prepare($requi);
+        $stm->execute();
+        $result = $stm->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
     public function insertRDV($data)
     {
         $conn = $this->db;

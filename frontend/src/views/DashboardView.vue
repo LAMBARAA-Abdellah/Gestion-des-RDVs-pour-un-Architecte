@@ -76,7 +76,7 @@
             <h1>MAKE</h1>
             <h3>&nbsp;&nbsp;&nbsp;an appointment</h3>
           </div>
-          <form @submit.prevent class="formRDV">
+          <form  class="formRDV">
             <!-- <select>
               <option selected>Choose the Subject</option>
               <option value="#">Build a House</option>
@@ -95,9 +95,7 @@
             <br />
             <select v-model="NewRDV.id_creneau">
               <option selected>Choose the time</option>
-              <option value="1">10:00 - 10:30</option>
-              <option value="2">11:00 - 11:30</option>
-              <option value="3">12:00 - 12:30</option>
+              <option v-for="cro in crono" :key="cro">{{cro}}</option>
             </select>
             <br />
             <input @click="newrdv()" type="submit" class="btnSubmit" value="Submit">
@@ -167,7 +165,8 @@ export default {
         sujet: "",
         date: "",
         id_creneau: ""
-      }
+      },
+      crono:""
     }
   },
   methods: {
@@ -197,6 +196,9 @@ export default {
         method:"GET",
       }).then((repon)=>{
         return repon.json();
+      }).then((rest)=>{
+        this.crono=rest;
+
       })
     }
 
@@ -214,6 +216,9 @@ export default {
 <style scoped>
 * {
   font-family: "Roboto";
+}
+.rdv form input{
+cursor: pointer;
 }
 template {
   font-family: "roboto";

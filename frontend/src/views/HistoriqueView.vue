@@ -80,105 +80,70 @@
                 </ul>
             </div>
             <div id="popup1" class="overlay">
-                            <div class="popup">
-                                <h2>
-                                    Update
-                                    Your Appointment
-                                </h2>
-                                <a class="close" href="#">&times;</a>
+                <div class="popup">
+                    <h2>
+                        Update
+                        Your Appointment
+                    </h2>
+                    <a class="close" href="#">&times;</a>
 
-                                <form class="formRDV">
-                                    <select>
-                                        <option selected>Choose the Subject</option>
-                                        <option value="#">Build a House</option>
-                                        <option value="#">Build a House</option>
-                                        <option value="#">Build a House</option>
-                                    </select>
-                                    <br />
-                                    <input
-                                        type="date"
-                                        max="2021-03-30"
-                                        placeholder="Choose the Time"
-                                    />
-                                    <br />
-                                    <select>
-                                        <option selected>Choose the time</option>
-                                        <option value="#">10:00 - 10:30</option>
-                                        <option value="#">11:00 - 11:30</option>
-                                        <option value="#">12:00 - 12:30</option>
-                                    </select>
-                                    <br />
-                                    <div class="btn">
-                                    <button type="submit" class="btnSubmit">Update</button>
-                                    <button class="btnSubmit">Delete</button>
-                                    </div>
-                                    
-                                </form>
-                            </div>
+                    <form class="formRDV">
+                        <select>
+                            <option selected>Choose the Subject</option>
+                            <option value="#">Build a House</option>
+                            <option value="#">Build a House</option>
+                            <option value="#">Build a House</option>
+                        </select>
+                        <br />
+                        <input type="date" max="2021-03-30" placeholder="Choose the Time" />
+                        <br />
+                        <select>
+                            <option selected>Choose the time</option>
+                            <option value="#">10:00 - 10:30</option>
+                            <option value="#">11:00 - 11:30</option>
+                            <option value="#">12:00 - 12:30</option>
+                        </select>
+                        <br />
+                        <div class="btn">
+                            <button type="submit" class="btnSubmit">Update</button>
+                            <button class="btnSubmit">Delete</button>
                         </div>
+                    </form>
+                </div>
+            </div>
             <div class="body">
                 <h1>All the appointments you've booked.</h1>
-                <div class="RDV">
-                <div class="All-rendez">
-                    <div class="rendez-content">
-                        <div class="rendez">
-                            <div class="sous-rendez">
-                                <div class="object">build a house</div>
-                                <div class="date">03/12/2022</div>
-                                <div class="time">10:00 - 10:30</div>
+                <div class="RDV"  v-if="rdvs.length > 0">
+                    <div class="All-rendez">
+                        <div v-for="data in rdvs" :key="data.id" class="rendez-content">
+                            <div class="rendez">
+                                <div class="sous-rendez">
+                                    <div class="object">{{ data.sujet }}</div>
+                                    <div class="date">{{ data.date_r }}</div>
+                                    <div class="time">{{ data.id_creneau }}</div>
+                                </div>
+                                
                             </div>
-                        </div>
-                        <form>
-                            <a href=" #popup1">
-                                <img src="../assets/add.png" />
-                            </a>
-                        </form>
-
                         
-                    </div>
-
-                    <div class="rendez-content">
-                        <div class="rendez">
-                            <div class="sous-rendez">
-                                <div class="object">build a house</div>
-                                <div class="date">03/12/2022</div>
-                                <div class="time">10:00 - 10:30</div>
-                            </div>
+                            <form>
+                                <a href=" #popup1">
+                                    <img src="../assets/add.png" />
+                                </a>
+                            </form>
                         </div>
-
-                        <form>
-                            <a href=" #popup1">
-                                <img src="../assets/add.png" />
-                            </a>
-                        </form>
-
-                        
                     </div>
-                </div>
-                <hr />
-                <div class="historique">
-                </div>
-                
-                    <div v-for="data in list" :key="data.id" class="rendez-content">
-                        <div class="rendez">
-                            <div class="sous-rendez">
-                                <div class="object">{{ data.sujet }}</div>
-                                <div class="date">{{ data.date_r }}</div>
-                                <div class="time">{{ data.date_c }}</div>
+                    <hr />
+                    <div class="historique">
+                        <div v-for="data in rdvsh" :key="data.id" class="rendez-content">
+                            <div class="rendez">
+                                <div class="sous-rendez">
+                                    <div class="object">{{ data.sujet }}</div>
+                                    <div class="date">{{ data.date_r }}</div>
+                                    <div class="time">{{ data.id_creneau }}</div>
+                                </div>
                             </div>
                         </div>
                     </div>
-
-                    <!-- <div class="rendez-content">
-                        <div class="rendez">
-                            <div class="sous-rendez">
-                                <div class="object">build a house</div>
-                                <div class="date">03/12/2022</div>
-                                <div class="time">10:00 - 10:30</div>
-                            </div>
-                        </div>
-                    </div>
-                    -->
                 </div>
             </div>
         </div>
@@ -227,31 +192,52 @@
 export default {
     name: "historique-view",
 
-    mounted() {
-        this.getUser();
-        // this.id = localStorage.getItem("id");
-        // console.log(localStorage.getItem("id"));
-        fetch(`http://localhost/rdv/backend/admin/rdvAll?id="this.id"`).then(res => res.json()).then(list => {
-            this.list = list;
-        })
 
-    },
     data() {
         return {
             userLog: {},
             id: localStorage.getItem("id"),
             // list: Array(4).fill({ id_r: "", date_r: new Date("2022-03-28"), sujet: "tester", id_creneau: 1, id_client: 1, date_c: "de 10 h a 10:30 h" }).map(v => ({ ...v, id: Math.random() })),
-            list: {
+            rdvs: {
                 id_r: "",
                 date_r: "",
                 sujet: "",
                 id_creneau: "",
                 id_client: "",
-                date_c: "",
+                // date_c: "",
+            },
+             rdvsh: {
+                id_r: "",
+                date_r: "",
+                sujet: "",
+                id_creneau: "",
+                id_client: "",
+                // date_c: "",
             },
             client: {},
 
         }
+    },
+    mounted() {
+        fetch(`http://localhost/rdv/backend/User/getAllRDV1?id=${this.id}`, {
+            method: "GET",
+        })
+            .then(ress => ress.json()).then(rdvs => {
+                this.rdvs = rdvs;
+                // console.log("gggggggggg");
+            })
+            fetch(`http://localhost/rdv/backend/User/getAllRDV2?id=${this.id}`, {
+            method: "GET",
+        })
+            .then(ress => ress.json()).then(rdvsh => {
+                this.rdvsh = rdvsh;
+                // console.log("gggggggggg");
+            })
+        this.getUser();
+        // this.id = localStorage.getItem("id");
+        // console.log(localStorage.getItem("id"));
+
+
     },
     methods: {
         getUser() {
@@ -265,16 +251,17 @@ export default {
                     this.userLog = data;
                 });
         },
-        newrdv() {
-            fetch(`http://localhost/rdv/backend/User/addRDV`, {
-                method: "POST",
-                body: JSON.stringify(this.NewRDV)
-            }).then((reponse => {
-                return reponse.json();
-            })).then((data) => {
-                console.log(data);
-            })
-        }
+
+        //     newrdv() {
+        //         fetch(`http://localhost/rdv/backend/User/addRDV`, {
+        //             method: "POST",
+        //             body: JSON.stringify(this.NewRDV)
+        //         }).then((reponse => {
+        //             return reponse.json();
+        //         })).then((data) => {
+        //             console.log(data);
+        //         })
+        //     }
 
     },
 }
@@ -294,23 +281,22 @@ template {
 }
 *::-webkit-scrollbar,
 *::-webkit-scrollbar-thumb {
-  width: 26px;
-  border-radius: 13px;
-  background-clip: padding-box;
-  border: 10px solid transparent;
-
+    width: 26px;
+    border-radius: 13px;
+    background-clip: padding-box;
+    border: 10px solid transparent;
 }
 
 *::-webkit-scrollbar-thumb {
-  box-shadow: inset 0 0 0 10px;
+    box-shadow: inset 0 0 0 10px;
 }
-.RDV{
+.RDV {
     overflow-x: auto;
-    height: 72%;
-    color: #252A30;
+    height: 400px;
+    color: #252a30;
 }
 .RDV:hover {
-  color: rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.3);
 }
 .allHistorique {
     background-image: url(../assets/back2.png);
@@ -557,10 +543,10 @@ select option {
     font-weight: bold;
     font-size: 16px;
 }
-.btn{
+.btn {
     display: flex;
-     justify-content: space-between;
-      flex-direction: row-reverse;
+    justify-content: space-between;
+    flex-direction: row-reverse;
 }
 
 .navbar .menu-items {

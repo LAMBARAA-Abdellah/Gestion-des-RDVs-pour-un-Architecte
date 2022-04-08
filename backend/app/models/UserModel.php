@@ -35,15 +35,7 @@ class UserModel
         $stm->execute();
     }
     // methodes pour insert une data dans database
-    public function getcreDate($data)
-    {
-        $conn = $this->db;
-        $requi = "SELECT `id_creneau` FROM `rdv` WHERE date_r:".$data;
-        $stm = $conn->prepare($requi);
-        $stm->execute();
-        $result = $stm->fetchAll(PDO::FETCH_ASSOC);
-        return $result;
-    }
+
     public function insert($data)
     {
         $conn = $this->db;
