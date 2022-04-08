@@ -66,20 +66,18 @@
                                 <button class="delete">
                                     <a @click="deleteClient(data.id)" class="btn" href="#">Delete</a>
                                 </button>
-                                <button @click="getUser(data.id)" class="update">
-                                    <a class="btn" href="#popup1">Update</a>
-                                </button>
+                                <button @click="getUser(data.id)" class="update">Update</button>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
-            <div id="popup1" class="overlay">
+            <div id="popup1" v-if="showPopup"  class="overlay">
                 <div class="popup">
                     <form @submit.prevent="updateUser">
                         <h2>Update Your Client</h2>
-                        <a class="close" href="#">&times;</a>
+                        <p class="close" @click="showPopup = false">&times;</p>
                         <div class="contentt">
                             <div>
                                 <div class="A1">
@@ -160,6 +158,7 @@ export default {
                 profession: "",
 
             },
+            showPopup: false
         }
     },
     methods: {
@@ -178,6 +177,7 @@ export default {
             })
         },
         getUser(id) {
+            this.showPopup = true;
             for (let i = 0; i < this.Client.length; i++) {
                 if (this.Client[i].id == id) {
                     this.list = this.Client[i];
@@ -209,7 +209,7 @@ export default {
                 })
                 .then((data) => {
                     if (data) {
-                        this.$router.push("/");
+                        this.showPopup = false
                         // this.form = !this.form
 
                     }
@@ -299,6 +299,7 @@ th:last-child {
     font-weight: bold;
     text-decoration: none;
     color: white;
+    cursor: pointer;
 }
 .popup .close:hover {
     color: #f9a800;
@@ -352,15 +353,8 @@ th:last-child {
     bottom: 0;
     left: 0;
     right: 0;
-    background: rgba(0, 0, 0, 0.7);
-    transition: opacity 500ms;
-    visibility: hidden;
-    opacity: 0;
-}
-.overlay:target {
-    visibility: visible;
-    opacity: 1;
     z-index: 999;
+    background: rgba(0, 0, 0, 0.7);
 }
 
 * {

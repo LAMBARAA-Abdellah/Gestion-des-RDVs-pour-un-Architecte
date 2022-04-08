@@ -28,6 +28,7 @@ const showPopup = ref(false);
         <form >
           <h4 @click="showPopup = true">Dont Have One ?</h4>
           <div v-if="showPopup" id="popup1" class="overlay">
+          
             <div class="popup">
               <h2>Create Your Account</h2>
               <p class="close" @click="showPopup = false">&times;</p>
