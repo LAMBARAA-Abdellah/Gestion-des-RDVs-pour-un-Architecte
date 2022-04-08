@@ -91,4 +91,26 @@ class Admin extends Controller
         echo json_encode($rdvs);
         die();
     }
+    public function getOneUser()
+    {
+        if ($_SERVER["REQUEST_METHOD"] === "GET") {
+            $id = $_GET['id'];
+            $admin = $this->model('AdminModel');
+            $data = $admin->SelectOneUser($id);
+            echo json_encode($data);
+        }
+    }
+    public function updateUser()
+    {
+      if ($_SERVER["REQUEST_METHOD"] === "POST") {
+        $UpdateUser = $this->model('AdminModel');
+        $json = file_get_contents('php://input');
+        $data = json_decode($json, true);
+        $Updatet = $UpdateUser->updateUser($data);
+        echo json_encode($Updatet);
+        // if ($created) {
+        //   echo json_encode($created);
+        // }
+      }
+    }
 }

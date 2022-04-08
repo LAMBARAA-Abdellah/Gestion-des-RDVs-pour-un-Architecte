@@ -66,46 +66,51 @@
                                 <button class="delete">
                                     <a @click="deleteClient(data.id)" class="btn" href="#">Delete</a>
                                 </button>
-                                <button class="update">
+                                <button @click="getUser(data.id)" class="update">
                                     <a class="btn" href="#popup1">Update</a>
                                 </button>
                             </td>
                         </tr>
-
-
-                    
                     </tbody>
                 </table>
             </div>
 
             <div id="popup1" class="overlay">
                 <div class="popup">
-                    <form>
-                        <h2>Create Your Account</h2>
+                    <form @submit.prevent="updateUser">
+                        <h2>Update Your Client</h2>
                         <a class="close" href="#">&times;</a>
                         <div class="contentt">
                             <div>
                                 <div class="A1">
                                     <label>First Name</label>
-                                    <input type="text" placeholder="First Name" />
+                                    <input
+                                        type="text"
+                                        v-model="list.fname"
+                                        placeholder="First Name"
+                                    />
                                 </div>
                                 <div class="A2">
                                     <label>Last Name</label>
-                                    <input type="text" placeholder="Last Name" />
+                                    <input type="text" v-model="list.lname" placeholder="Last Name" />
                                 </div>
                             </div>
                             <div>
                                 <div class="A1">
                                     <label>Telephone</label>
-                                    <input type="text" placeholder="Telephone" />
+                                    <input type="text" v-model="list.tel" placeholder="Telephone" />
                                 </div>
                                 <div class="A2">
                                     <label>Profession</label>
-                                    <input type="text" placeholder="Profession" />
+                                    <input
+                                        type="text"
+                                        v-model="list.profession"
+                                        placeholder="Profession"
+                                    />
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="create">create</button>
+                        <button type="submit" class="create">Update</button>
                     </form>
                 </div>
             </div>
@@ -137,7 +142,24 @@ export default {
                 profession: "",
 
             },
+            UserIDupdate: "",
             id: "",
+            list: {
+                id: "",
+                fname: "",
+                lname: "",
+                tel: "",
+                profession: "",
+
+            },
+            listt: {
+                id: "",
+                fname: "",
+                lname: "",
+                tel: "",
+                profession: "",
+
+            },
         }
     },
     methods: {
@@ -151,12 +173,53 @@ export default {
                 {
                     method: "DELETE"
                 }
-            )   .then(() => {
-                        this.afficher();
-                    })
+            ).then(() => {
+                this.afficher();
+            })
+        },
+        getUser(id) {
+            for (let i = 0; i < this.Client.length; i++) {
+                if (this.Client[i].id == id) {
+                    this.list = this.Client[i];
+                    break;
+                }
+            }
+        },
+        getOneUser() {
+            fetch(
+                `http://localhost/rdv/backend/admin/getOneUser?id="${this.UserIDupdate}"`,
+                {
+                    method: "GET",
+                }
+            ).then((result) => {
+                return result.json();
+            }).then((data) => {
+                this.list = data;
+            });
+        },
+        updateUser() {
+            fetch("http://localhost/rdv/backend/Admin/updateUser", {
+                method: "POST",
+                body: JSON.stringify(this.list),
+
+            })
+                .then((result) => {
+                    return result.json();
+
+                })
+                .then((data) => {
+                    if (data) {
+                        this.$router.push("/");
+                        // this.form = !this.form
+
+                    }
+                    // this.add(data);
+                });
         },
 
-    }
+    },
+
+
 }
 </script>
 
@@ -509,7 +572,7 @@ header {
 }
 .adcontent {
     background-color: #252a30;
-     min-height: 100vh; 
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
